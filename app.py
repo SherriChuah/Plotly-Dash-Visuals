@@ -14,12 +14,12 @@ from assets.config import Config
 
 config = Config()
 
-title = "Nottingham Project List Dashboard"
+title = "Project List Dashboard"
 
 # Read in data
 print('Reading data...')
 curr_path = os.getcwd()
-data_path = os.path.join(curr_path, 'Project List.xlsx')
+data_path = os.path.join(curr_path, 'Master Project List D2N2.xlsx')
 raw_data = preprocess_data(data_path)
 
 # Initialize the app
