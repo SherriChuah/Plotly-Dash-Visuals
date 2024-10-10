@@ -88,6 +88,8 @@ project_value_slider = html.Div(
         )
     ],
 )
+
+
 app.layout = html.Div([
     dbc.Container([
         dbc.Row(html.H1(
@@ -337,7 +339,7 @@ def update_tab(tab, tab2):
                 ], style={'width': '100%', 'paddingTop': '20px'}),
             ])
     elif tab == 'project_deep_dive':
-        table_fig = viz5(raw_data.copy())
+        table_fig = viz5(raw_data.copy(), tab2)
 
         if tab2 == "overview":
             return html.Div([

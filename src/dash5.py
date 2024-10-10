@@ -12,19 +12,22 @@ from src.load_data import distinguish_data
 config = Config()
 
 
-def generate_project_deep_dive_visualisation(df: pd.DataFrame):
-    table_fig = generate_table_data(df.copy())
+def generate_project_deep_dive_visualisation(df: pd.DataFrame, tab):
+    df_clean = clean_data(df)
+    df_all = distinguish_data(tab, df_clean)
+    table_fig = generate_table_data(df_all)
 
     return table_fig
 
 
-def generate_table_data(df: pd.DataFrame,
-                        council: str = config.default_council) -> DataTable:
+def clean_data(df):
     df.columns = df.columns.droplevel(0)
     df.columns = df.columns.droplevel(0)
 
-    df = df[df['Organisations'] == council]
+    return df
 
+
+def generate_table_data(df: pd.DataFrame) -> DataTable:
     table = DataTable(
         columns=[{"name": col, "id": col} for col in df.columns[1:]],
         data=df.to_dict('records'),
@@ -37,6 +40,8 @@ def generate_table_data(df: pd.DataFrame,
 
 
 def update_dash5_visuals_func(df, council):
-    table_fig = generate_table_data(df.copy(), council)
+    df_clean = clean_data(df)
+    df_all = distinguish_data('council_view', df_clean, council)
+    table_fig = generate_table_data(df_all)
 
     return table_fig
