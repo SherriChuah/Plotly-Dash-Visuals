@@ -1,6 +1,7 @@
 from dash import Dash, html, dcc, Input, Output, State, no_update
 import dash_bootstrap_components as dbc
 import os
+from flask import Flask
 
 from src.dash1 import generate_project_visualisation as viz1, update_dash1_visuals_func
 from src.dash2 import generate_project_classification_visualizations as viz2, update_dash2_visuals_func, update_project_classification_overview_fig
@@ -14,23 +15,24 @@ from assets.config import Config
 
 config = Config()
 
-title = "Project List Dashboard"
+title = "Nottingham Project List Dashboard"
 
 # Read in data
 print('Reading data...')
 curr_path = os.getcwd()
-data_path = os.path.join(curr_path, 'Project List.xlsx')
+data_path = os.path.join(curr_path, 'Master Project List D2N2.xlsx')
 raw_data = preprocess_data(data_path)
 
 # Initialize the app
 print("Initialise app...")
+server = Flask(__name__)
 app = Dash(
     __name__,
     external_stylesheets=[dbc.themes.BOOTSTRAP],
     title='Nottingham Project List Dashboard',
     suppress_callback_exceptions=True,
-    prevent_initial_callbacks='initial_duplicate')
-server = app.server
+    prevent_initial_callbacks='initial_duplicate',
+    server=server)
 
 
 # Dropdown for council
@@ -355,8 +357,4 @@ def update_tab(tab, tab2):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
-
-
-
-
+    app.run_server(debug=True)
