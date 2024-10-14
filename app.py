@@ -25,14 +25,14 @@ raw_data = preprocess_data(data_path)
 
 # Initialize the app
 print("Initialise app...")
-server = Flask(__name__)
 app = Dash(
     __name__,
     external_stylesheets=[dbc.themes.BOOTSTRAP],
     title='Nottingham Project List Dashboard',
     suppress_callback_exceptions=True,
-    prevent_initial_callbacks='initial_duplicate',
-    server=server)
+    prevent_initial_callbacks='initial_duplicate')
+
+server=app.server
 
 
 # Dropdown for council
@@ -357,4 +357,4 @@ def update_tab(tab, tab2):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run(debug=True)
