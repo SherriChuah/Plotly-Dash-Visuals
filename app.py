@@ -3,11 +3,19 @@ import dash_bootstrap_components as dbc
 import os
 from flask import Flask
 
-from src.dash1 import generate_project_visualisation as viz1, update_dash1_visuals_func
-from src.dash2 import generate_project_classification_visualizations as viz2, update_dash2_visuals_func, update_project_classification_overview_fig
-from src.dash3 import generate_project_value_distribution_visualisation as viz3, update_dash3_visuals_func, get_max_project_value, update_project_value_overview_fig
-from src.dash4 import generate_project_theme_distribution_visualisation as viz4, update_dash4_visuals_func
-from src.dash5 import generate_project_deep_dive_visualisation as viz5, update_dash5_visuals_func
+from src.dash1 import generate_project_visualisation as viz1, \
+    update_dash1_visuals_func
+from src.dash2 import generate_project_classification_visualizations as viz2, \
+    update_dash2_visuals_func, update_project_classification_overview_fig
+from src.dash3 import \
+    generate_project_value_distribution_visualisation as viz3, \
+    update_dash3_visuals_func, get_max_project_value, \
+    update_project_value_overview_fig
+from src.dash4 import \
+    generate_project_theme_distribution_visualisation as viz4, \
+    update_dash4_visuals_func
+from src.dash5 import generate_project_deep_dive_visualisation as viz5, \
+    update_dash5_visuals_func
 
 from src.load_data import preprocess_data, get_project_classification
 
@@ -32,8 +40,7 @@ app = Dash(
     suppress_callback_exceptions=True,
     prevent_initial_callbacks='initial_duplicate')
 
-server=app.server
-
+server = app.server
 
 # Dropdown for council
 council_dropdown = html.Div(
@@ -41,14 +48,15 @@ council_dropdown = html.Div(
         dbc.Label("Select a Council", html_for="council_dropdown"),
         dcc.Dropdown(
             id="council-dropdown",
-            options=sorted(raw_data[('Fast Followers member', 'Unnamed: 0_level_1', 'Organisations')].unique()),
+            options=sorted(raw_data[(
+            'Fast Followers member', 'Unnamed: 0_level_1',
+            'Organisations')].unique()),
             value=config.default_council,
             clearable=False,
             style={'marginBottom': '5px'}
         ),
     ]
 )
-
 
 # Dropdown for project classification
 project_classification_dropdown = html.Div(
@@ -57,7 +65,8 @@ project_classification_dropdown = html.Div(
         html.Div(
             children=dcc.Checklist(
                 id="project-classification-checklist",
-                options=[{"label": "Select All Classification", "value": "All"}],
+                options=[
+                    {"label": "Select All Classification", "value": "All"}],
                 value=[],
             ),
         ),
@@ -72,7 +81,6 @@ project_classification_dropdown = html.Div(
         ),
     ],
 )
-
 
 # Slider for project value
 project_value_slider = html.Div(
@@ -91,7 +99,6 @@ project_value_slider = html.Div(
     ],
 )
 
-
 app.layout = html.Div([
     dbc.Container([
         dbc.Row(html.H1(
@@ -99,23 +106,26 @@ app.layout = html.Div([
             style={'textAlign': 'center', 'paddingTop': '20px',
                    'color': config.secondary_color})),
         dbc.Row(dcc.Tabs(id='graph-tabs', value='project_count', children=[
-                    dcc.Tab(label='Projects', value='project_count',
-                            style=config.tab_style['idle'],
-                            selected_style=config.tab_style['active']),
-                    dcc.Tab(label='Project Classification', value='project_classification',
-                            style=config.tab_style['idle'],
-                            selected_style=config.tab_style['active']),
-                    dcc.Tab(label='Project Value Distribution', value='project_value_distribution',
-                            style=config.tab_style['idle'],
-                            selected_style=config.tab_style['active']),
-                    dcc.Tab(label='Project Theme Distribution', value='project_theme_distribution',
-                            style=config.tab_style['idle'],
-                            selected_style=config.tab_style['active']),
-                    dcc.Tab(label='Project Deep Dive', value='project_deep_dive',
-                            style=config.tab_style['idle'],
-                            selected_style=config.tab_style['active']),
-                ], style={'paddingTop': '10px', 'paddingBottom': '5px',
-                          'height': '50vx'})),
+            dcc.Tab(label='Projects', value='project_count',
+                    style=config.tab_style['idle'],
+                    selected_style=config.tab_style['active']),
+            dcc.Tab(label='Project Classification',
+                    value='project_classification',
+                    style=config.tab_style['idle'],
+                    selected_style=config.tab_style['active']),
+            dcc.Tab(label='Project Value Distribution',
+                    value='project_value_distribution',
+                    style=config.tab_style['idle'],
+                    selected_style=config.tab_style['active']),
+            dcc.Tab(label='Project Theme Distribution',
+                    value='project_theme_distribution',
+                    style=config.tab_style['idle'],
+                    selected_style=config.tab_style['active']),
+            dcc.Tab(label='Project Deep Dive', value='project_deep_dive',
+                    style=config.tab_style['idle'],
+                    selected_style=config.tab_style['active']),
+        ], style={'paddingTop': '10px', 'paddingBottom': '5px',
+                  'height': '50vx'})),
         dbc.Row([
             dcc.Tabs(id='tabs', value='overview', children=[
                 dcc.Tab(label='Overview', value='overview',
@@ -218,13 +228,15 @@ def update_classification_dropdown(select_all, select_some):
 
 # Project value distribution overview
 @app.callback(
-    Output("project-value-distribution-graph1", "figure", allow_duplicate=True),
+    Output("project-value-distribution-graph1", "figure",
+           allow_duplicate=True),
     Input("project-value-slider", "value")
 )
 def update_classification_dropdown(slider_value):
     fig = update_project_value_overview_fig(raw_data.copy(), slider_value)
 
     return fig
+
 
 # @app.callback(
 #     Output("checklist-container", "children"),
@@ -255,7 +267,7 @@ def update_classification_dropdown(slider_value):
 @app.callback(
     Output('tabs-content', 'children'),
     [Input('graph-tabs', 'value'),
-    Input('tabs', 'value')]
+     Input('tabs', 'value')]
 )
 def update_tab(tab, tab2):
     if tab == 'project_count':
@@ -313,7 +325,8 @@ def update_tab(tab, tab2):
             return html.Div([
                 dbc.Col([project_value_slider]),
                 html.Div([
-                    dcc.Graph(id='project-value-distribution-graph1', figure=fig_bar),
+                    dcc.Graph(id='project-value-distribution-graph1',
+                              figure=fig_bar),
                 ], style={'width': '100%', 'paddingTop': '20px'}),
             ])
         else:
@@ -330,14 +343,16 @@ def update_tab(tab, tab2):
         if tab2 == "overview":
             return html.Div([
                 html.Div([
-                    dcc.Graph(id='project-theme-distribution-graph1', figure=fig_bar),
+                    dcc.Graph(id='project-theme-distribution-graph1',
+                              figure=fig_bar),
                 ], style={'width': '100%', 'paddingTop': '20px'}),
             ])
         else:
             return html.Div([
                 dbc.Col([council_dropdown]),
                 html.Div([
-                    dcc.Graph(id='project-theme-distribution-graph1', figure=fig_bar),
+                    dcc.Graph(id='project-theme-distribution-graph1',
+                              figure=fig_bar),
                 ], style={'width': '100%', 'paddingTop': '20px'}),
             ])
     elif tab == 'project_deep_dive':
@@ -345,8 +360,8 @@ def update_tab(tab, tab2):
 
         if tab2 == "overview":
             return html.Div([
-                    table_fig,
-                ], id="project-deep-dive-graph1", style={'width': '100%'})
+                table_fig,
+            ], id="project-deep-dive-graph1", style={'width': '100%'})
         else:
             return html.Div([
                 dbc.Col([council_dropdown]),
