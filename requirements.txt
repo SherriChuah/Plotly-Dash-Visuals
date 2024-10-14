@@ -3,3 +3,4 @@ plotly~=5.24.1
 dash~=2.18.1
 gunicorn
 dash_bootstrap_components
+openpyxl
