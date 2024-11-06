@@ -10,7 +10,11 @@ python3 -m venv {venv_name}
 ```asciidoc
 source {venv_name}/bin/activate 
 ```
-3. Run the app
+3. Install required packages
+```
+pip install -r requirements.txt
+```
+4. Run the app
 ```asciidoc
 python app.py
 ```
